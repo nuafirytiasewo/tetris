@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js';
+import { Grid } from './grid';
 
 export class Main {
     constructor(app) {
@@ -26,6 +27,7 @@ export class Main {
             rectangleWidth = app.screen.width * 0.7; // ширина прямоугольника (70% от ширины экрана)
             rectangleHeight = app.screen.height * 0.6; // высота прямоугольника (60% от высоты экрана)
         }
+        console.log(rectangleWidth, rectangleHeight);
         
         rectangleX = -rectangleWidth / 2; // центрирование по горизонтали относительно центра контейнера
         rectangleY = -rectangleHeight / 2; // центрирование по вертикали относительно центра контейнера
@@ -33,8 +35,12 @@ export class Main {
         this.rectangleMain.endFill();
 
         app.stage.addChild(this.rectangleMain);
+
+        //инициализация сетки
+        this.grid = new Grid ()
     }
 
     start() {
+        this.grid.create();
     }
 }
