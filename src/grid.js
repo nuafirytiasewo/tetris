@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import {BORDER_COLOR, CUBE_FILL_COLOR, WIDTH_BORDER} from './constants';
+import {BORDER_COLOR, CUBE_FILL_COLOR, WIDTH_BORDER, WIDTH_FIELD, HEIGHT_FIELD} from './constants';
 
 export class Grid {
     constructor(rectangleMain, rectangleWidth, rectangleHeight) {
@@ -7,40 +7,46 @@ export class Grid {
         this.rectangleWidth = rectangleWidth;
         this.rectangleHeight = rectangleHeight;
 
-        //определяем размер каждого квадратика
-        this.cubeWidth = this.rectangleWidth / 10; //делим на 10, потому что в ширину их должно быть 10
+        //определяем размер каждой клетки
+        this.cubeWidth = this.rectangleWidth / WIDTH_FIELD; //делим на 10, потому что в ширину их должно быть 10
         //делим на 20, потому что в высоту их должно быть 20, 
-        this.cubeHeight = this.rectangleHeight / 20; //а также потому что высота в 2 раза больше ширины у прямоугольника
-        
-        //записываем в переменную квадратик
-        this.cube = new PIXI.Graphics();
-        
+        this.cubeHeight = this.rectangleHeight / HEIGHT_FIELD; //а также потому что высота в 2 раза больше ширины у прямоугольника
     }
     create() {
-        //рисуем квадратик в сетке
-        this.cube.lineStyle(WIDTH_BORDER, BORDER_COLOR, 1);
+        // устанавливаем начальные координаты клетки в левый верхний угол rectangleMain
+        let cubeX = -this.rectangleWidth / 2;
+        let cubeY = -this.rectangleHeight / 2;
+        // цикл для рисования клеток по высоте
+        for (let i = 0; i < HEIGHT_FIELD; i++) {
+            //возвращаемся в начало по x
+            cubeX = -this.rectangleWidth / 2;
+            //цикл по ширине
+            for (let j = 0; j < WIDTH_FIELD; j++) {
+                //записываем в переменную квадратик
+                this.cube = new PIXI.Graphics();
+                //рисуем квадратик в сетке
+                this.cube.lineStyle(WIDTH_BORDER, BORDER_COLOR, 1);
+                this.cube.beginFill(CUBE_FILL_COLOR, 1);
+                this.cube.drawRect(0, 0, this.cubeWidth, this.cubeHeight);
+                this.cube.endFill();
+                
+                //устанавливаем координаты каждой клетки
+                this.cube.x = cubeX;
+                this.cube.y = cubeY;
+                //сначала проходимся по ширине
+                cubeX += this.cubeWidth;
 
-        // Устанавливаем pivot в центр квадратика
-        this.cube.pivot.set(this.cubeWidth / 2, this.cubeHeight / 2);
+                console.log("Клетка:" + i + " " + j);
+                console.log("Ширина клетки" + this.cubeWidth);
+                console.log("Высота клетки" + this.cubeHeight);
+                console.log("x: " + this.cube.x);
+                console.log("y: " + this.cube.y);
 
-        this.cube.x = - this.rectangleMain.width / 2;
-        this.cube.y = - this.rectangleMain.height / 2;
-        
-        this.cube.beginFill(CUBE_FILL_COLOR, 1);
-        this.cube.drawRect(this.cube.x, this.cube.y, this.cubeWidth, this.cubeHeight);
-        this.cube.endFill();
-        
-        
-        console.log(this.cubeWidth, this.cubeHeight, this.cube.x, this.cube.y);
-        this.rectangleMain.addChild(this.cube);
-
-        // // цикл для рисования секторов
-        // for (let i = 0; i < this.amountSegments; i++) {
-        //     //рисуем сектор
-        //     const sector = new Sector(this.borderWheel, this.radiuscube, this.angleStep, i);
-        //     sector.create();
-        //     //добавляем сектор на основу для колеса
-        //     this.cube.addChild(sector.sector);
-        // }
+                //добавляем на поле нашу клетку
+                this.rectangleMain.addChild(this.cube);
+            }
+            //проходимся по высоте
+            cubeY += this.cubeHeight;
+        }
     }
 }
