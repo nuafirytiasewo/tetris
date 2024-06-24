@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { Grid } from './grid';
+import { BORDER_COLOR, WIDTH_BORDER } from './constants';
 
 export class Main {
     constructor(app) {
@@ -11,7 +12,7 @@ export class Main {
         this.rectangleMain.x = app.screen.width / 2;
         this.rectangleMain.y = app.screen.height / 2;
 
-        this.rectangleMain.lineStyle(4, 0xfeeb77, 1);
+        this.rectangleMain.lineStyle(WIDTH_BORDER, 0xfeeb77, 1);
         this.rectangleMain.beginFill(0xffffff);
 
         let rectangleWidth, rectangleHeight, rectangleX, rectangleY;
@@ -19,13 +20,13 @@ export class Main {
         //если чел запускает на компе (ширина больше, чем высота)
         if (app.screen.width >= app.screen.height) {
             rectangleWidth = app.screen.width * 0.2; // ширина прямоугольника (20% от ширины экрана)
-            rectangleHeight = app.screen.height * 0.6; // высота прямоугольника (60% от высоты экрана)
+            rectangleHeight = rectangleWidth * 2; // высота прямоугольника (в 2 раза больше чем ширина)
             
         } 
         //иначе на мобилке
         else {
             rectangleWidth = app.screen.width * 0.7; // ширина прямоугольника (70% от ширины экрана)
-            rectangleHeight = app.screen.height * 0.6; // высота прямоугольника (60% от высоты экрана)
+            rectangleHeight = rectangleWidth * 2; // высота прямоугольника (в 2 раза больше чем ширина)
         }
         console.log(rectangleWidth, rectangleHeight);
         
@@ -37,7 +38,7 @@ export class Main {
         app.stage.addChild(this.rectangleMain);
 
         //инициализация сетки
-        this.grid = new Grid ()
+        this.grid = new Grid (this.rectangleMain, rectangleWidth, rectangleHeight)
     }
 
     start() {
