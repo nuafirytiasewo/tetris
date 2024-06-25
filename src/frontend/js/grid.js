@@ -16,10 +16,16 @@ export class Grid {
         // устанавливаем начальные координаты клетки в левый верхний угол rectangleMain
         let cubeX = -this.rectangleWidth / 2;
         let cubeY = -this.rectangleHeight / 2;
+
+        // создаем массив в который будем запихивать каждую клетку (допустим i x j размерности)
+        const gridSet = [];
         // цикл для рисования клеток по высоте
         for (let i = 0; i < HEIGHT_FIELD; i++) {
             //возвращаемся в начало по x
             cubeX = -this.rectangleWidth / 2;
+            
+            gridSet[i] = []; // создаем подмассив (проходимся по i - первому значению, берем из строк - итератора)
+
             //цикл по ширине
             for (let j = 0; j < WIDTH_FIELD; j++) {
                 //записываем в переменную квадратик
@@ -36,17 +42,24 @@ export class Grid {
                 //сначала проходимся по ширине
                 cubeX += this.cubeWidth;
 
+                //вывод
                 console.log("Клетка:" + i + " " + j);
                 console.log("Ширина клетки" + this.cubeWidth);
                 console.log("Высота клетки" + this.cubeHeight);
                 console.log("x: " + this.cube.x);
                 console.log("y: " + this.cube.y);
 
+                //запихиваем в этот массив все клетки по ширине (заполняем второе число - j)
+                gridSet[i].push(this.cube);
+
+                console.log("Обьект: " + this.cube.fill.color);
                 //добавляем на поле нашу клетку
                 this.rectangleMain.addChild(this.cube);
             }
             //проходимся по высоте
             cubeY += this.cubeHeight;
         }
+        //обращаемся к элементу массива
+        console.log(gridSet[2][3].x, gridSet[2][3].y);
     }
 }
