@@ -67,14 +67,20 @@ module.exports = {
 ```
 npm i pixi.js@7 --save-dev
 ```
-7. В файл package.json добавил (заменил) данный код:
+
+7. Установил последнюю версию pixi-sound
+```
+npm install pixi-sound --save-dev
+```
+
+8. В файл package.json добавил (заменил) данный код:
 ```
 "scripts": {
     "start": "webpack-dev-server --mode development",
     "build": "webpack --mode production"
   },
 ```
-8. Запустил
+9. Запустил
 
 ```
 npm start
