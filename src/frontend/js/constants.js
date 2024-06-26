@@ -10,3 +10,5 @@ export const WIDTH_BORDER = 4;
 export const WIDTH_FIELD = 10;
 //количество клеток по высоте
 export const HEIGHT_FIELD = 20;
+//буква фигуры
+export const WORD_SHAPE = ["I", "O", "L", "J", "S", "Z", "T"]

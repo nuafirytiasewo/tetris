@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js';
 import {BORDER_COLOR, CUBE_FILL_COLOR, WIDTH_BORDER, WIDTH_FIELD, HEIGHT_FIELD} from './constants';
+import { Shapes } from './shapes';
 
 export class Grid {
     constructor(rectangleMain, rectangleWidth, rectangleHeight) {
@@ -59,7 +60,11 @@ export class Grid {
             //проходимся по высоте
             cubeY += this.cubeHeight;
         }
+        //создаем стартовый квардратик, откуда будут рисоваться остальные фигуры
+        this.startShape = new Shapes(this.rectangleMain, gridSet[2][3].x, gridSet[2][3].y, gridSet[2][3].width, gridSet[2][3].height)
+        this.startShape.create();
         //обращаемся к элементу массива
         console.log(gridSet[2][3].x, gridSet[2][3].y);
+
     }
 }
