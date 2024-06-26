@@ -2,17 +2,20 @@ import * as PIXI from 'pixi.js';
 import { Grid } from './grid';
 import { BORDER_COLOR, WIDTH_BORDER } from './constants';
 
+//этот класс создает контейнер, в котором будет располагаться сетка
 export class Main {
     constructor(app) {
         this.app = app;
      
+        //инициализируем контейнер в котором будет располагаться сетка
         this.rectangleMain = new PIXI.Graphics();
 
         // Перемещение контейнера в центр экрана и установка координат x и y контейнера в середину экрана приложения.
         this.rectangleMain.x = app.screen.width / 2;
         this.rectangleMain.y = app.screen.height / 2;
 
-        this.rectangleMain.lineStyle(WIDTH_BORDER, 0xfeeb77, 1);
+        //начинаем рисовать контейнер
+        this.rectangleMain.lineStyle(WIDTH_BORDER, BORDER_COLOR, 1);
         this.rectangleMain.beginFill(0xffffff);
 
         let rectangleWidth, rectangleHeight, rectangleX, rectangleY;

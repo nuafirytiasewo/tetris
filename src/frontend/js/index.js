@@ -7,4 +7,5 @@ globalThis.__PIXI_APP__ = app;
 document.body.appendChild(app.view);
 
 const main = new Main(app);
+//запуск кода
 main.start();

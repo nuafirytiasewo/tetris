@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js';
 import {BORDER_COLOR, CUBE_FILL_COLOR, WIDTH_BORDER, WIDTH_FIELD, HEIGHT_FIELD} from './constants';
 import { Shapes } from './shapes';
 
+//этот класс отвечает за создание сетки, которая будет заполнена клетками
 export class Grid {
     constructor(rectangleMain, rectangleWidth, rectangleHeight) {
         this.rectangleMain = rectangleMain;
@@ -18,7 +19,7 @@ export class Grid {
         let cubeX = -this.rectangleWidth / 2;
         let cubeY = -this.rectangleHeight / 2;
 
-        // создаем массив в который будем запихивать каждую клетку (допустим i x j размерности)
+        // создаем массив (сетку) в который будем запихивать каждую клетку (допустим i x j размерности)
         const gridSet = [];
         // цикл для рисования клеток по высоте
         for (let i = 0; i < HEIGHT_FIELD; i++) {
@@ -29,9 +30,9 @@ export class Grid {
 
             //цикл по ширине
             for (let j = 0; j < WIDTH_FIELD; j++) {
-                //записываем в переменную квадратик
+                //записываем в переменную клетку
                 this.cube = new PIXI.Graphics();
-                //рисуем квадратик в сетке
+                //рисуем клетку в сетке
                 this.cube.lineStyle(WIDTH_BORDER, BORDER_COLOR, 1);
                 this.cube.beginFill(CUBE_FILL_COLOR, 1);
                 this.cube.drawRect(0, 0, this.cubeWidth, this.cubeHeight);
@@ -61,9 +62,10 @@ export class Grid {
             cubeY += this.cubeHeight;
         }
         //создаем стартовый квардратик, откуда будут рисоваться остальные фигуры
-        this.startShape = new Shapes(this.rectangleMain, gridSet[2][3].x, gridSet[2][3].y, gridSet[2][3].width, gridSet[2][3].height)
+        // this.cubeWidth, this.cubeHeight - чтобы сохранять размер клетки
+        this.startShape = new Shapes(this.rectangleMain, gridSet[2][3].x, gridSet[2][3].y, this.cubeWidth, this.cubeHeight)
         this.startShape.create();
-        //обращаемся к элементу массива
+        //вывод параметров выбранной клетки, на котором будет рисоваться стартовый квадратик
         console.log(gridSet[2][3].x, gridSet[2][3].y);
 
     }
