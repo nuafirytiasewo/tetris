@@ -7,41 +7,50 @@ export class Main {
     constructor(app) {
         this.app = app;
      
-        //инициализируем контейнер в котором будет располагаться сетка
-        this.rectangleMain = new PIXI.Graphics();
+        //инициализируем контейнер (containerMain) в котором будет располагаться сетка (grid)
+        this.containerMain = new PIXI.Graphics();
 
-        // Перемещение контейнера в центр экрана и установка координат x и y контейнера в середину экрана приложения.
-        this.rectangleMain.x = app.screen.width / 2;
-        this.rectangleMain.y = app.screen.height / 2;
+        // Перемещение контейнера в центр экрана и установка координат x и y контейнера в середину экрана приложения
+        // то есть мы установили "пивот" в самый центр, оттуда и будут считаться относительные координаты для данного контейнера
+        this.containerMain.x = app.screen.width / 2;
+        this.containerMain.y = app.screen.height / 2;
 
         //начинаем рисовать контейнер
-        this.rectangleMain.lineStyle(WIDTH_BORDER, BORDER_COLOR, 1);
-        this.rectangleMain.beginFill(0xffffff);
+        this.containerMain.lineStyle(WIDTH_BORDER, BORDER_COLOR, 1);
+        this.containerMain.beginFill(0xffffff);
 
-        let rectangleWidth, rectangleHeight, rectangleX, rectangleY;
+        //инициализируем переменные, отвечающие за ширину/высоту, абсолютные координаты
+        let containerWidth, containerHeight, containerX, containerY;
 
-        //если чел запускает на компе (ширина больше, чем высота)
+        //если чел запускает на компе (то есть если ширина экрана больше, чем высота)
         if (app.screen.width >= app.screen.height) {
-            rectangleWidth = app.screen.width * 0.2; // ширина прямоугольника (20% от ширины экрана)
-            rectangleHeight = rectangleWidth * 2; // высота прямоугольника (в 2 раза больше чем ширина)
-            
+            containerWidth = app.screen.width * 0.2; // ширина контейнера (20% от ширины экрана)
+            containerHeight = containerWidth * 2; // высота контейнера (в 2 раза больше чем ширина)
         } 
         //иначе на мобилке
         else {
-            rectangleWidth = app.screen.width * 0.7; // ширина прямоугольника (70% от ширины экрана)
-            rectangleHeight = rectangleWidth * 2; // высота прямоугольника (в 2 раза больше чем ширина)
+            containerWidth = app.screen.width * 0.6; // ширина контейнера (60% от ширины экрана)
+            containerHeight = containerWidth * 2; // высота контейнера (в 2 раза больше чем ширина)
         }
-        console.log(rectangleWidth, rectangleHeight);
         
-        rectangleX = -rectangleWidth / 2; // центрирование по горизонтали относительно центра контейнера
-        rectangleY = -rectangleHeight / 2; // центрирование по вертикали относительно центра контейнера
-        this.rectangleMain.drawRect(rectangleX, rectangleY, rectangleWidth, rectangleHeight);
-        this.rectangleMain.endFill();
+        //записываем абсолютные координаты для того чтобы начертить контейнер на экране
+        containerX = -containerWidth / 2; // центрирование по горизонтали "относительно" центра контейнера
+        containerY = -containerHeight / 2; // центрирование по вертикали "относительно" центра контейнера
 
-        app.stage.addChild(this.rectangleMain);
+        //вывод
+        console.log("Ширина контейнера", containerWidth);
+        console.log("Высота контейнера", containerHeight);
+        console.log("Абсолютный X контейнера", containerX);
+        console.log("Абсолютный Y контейнера", containerY);
+
+        //рисуем контейнер
+        this.containerMain.drawRect(containerX, containerY, containerWidth, containerHeight);
+        this.containerMain.endFill();
+
+        app.stage.addChild(this.containerMain);
 
         //инициализация сетки
-        this.grid = new Grid (this.rectangleMain, rectangleWidth, rectangleHeight)
+        this.grid = new Grid (this.containerMain, containerWidth, containerHeight)
     }
 
     start() {

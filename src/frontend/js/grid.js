@@ -4,27 +4,30 @@ import { Shapes } from './shapes';
 
 //этот класс отвечает за создание сетки, которая будет заполнена клетками
 export class Grid {
-    constructor(rectangleMain, rectangleWidth, rectangleHeight) {
-        this.rectangleMain = rectangleMain;
-        this.rectangleWidth = rectangleWidth;
-        this.rectangleHeight = rectangleHeight;
+    constructor(containerMain, containerWidth, containerHeight) {
+        //передаем контейнер
+        this.containerMain = containerMain;
+        //передаем ширину контейнера
+        this.containerWidth = containerWidth;
+        //передаем высоту контейнера
+        this.containerHeight = containerHeight;
 
         //определяем размер каждой клетки
-        this.cubeWidth = this.rectangleWidth / WIDTH_FIELD; //делим на 10, потому что в ширину их должно быть 10
+        this.cubeWidth = this.containerWidth / WIDTH_FIELD; //делим на 10, потому что в ширину их должно быть 10
         //делим на 20, потому что в высоту их должно быть 20, 
-        this.cubeHeight = this.rectangleHeight / HEIGHT_FIELD; //а также потому что высота в 2 раза больше ширины у прямоугольника
+        this.cubeHeight = this.containerHeight / HEIGHT_FIELD; //а также потому что высота в 2 раза больше ширины у прямоугольника
     }
     create() {
-        // устанавливаем начальные координаты клетки в левый верхний угол rectangleMain
-        let cubeX = -this.rectangleWidth / 2;
-        let cubeY = -this.rectangleHeight / 2;
+        // устанавливаем начальные координаты (первой) клетки в левый верхний угол containerMain
+        let cubeX = -this.containerWidth / 2;
+        let cubeY = -this.containerHeight / 2;
 
-        // создаем массив (сетку) в который будем запихивать каждую клетку (допустим i x j размерности)
+        // создаем массив (сетку i x j размерности) в который будем запихивать каждую клетку
         const gridSet = [];
         // цикл для рисования клеток по высоте
         for (let i = 0; i < HEIGHT_FIELD; i++) {
-            //возвращаемся в начало по x
-            cubeX = -this.rectangleWidth / 2;
+            //возвращаемся в начало по x (то есть каждая строка будет заново заполняться с этого значения)
+            cubeX = -this.containerWidth / 2;
             
             gridSet[i] = []; // создаем подмассив (проходимся по i - первому значению, берем из строк - итератора)
 
@@ -38,7 +41,8 @@ export class Grid {
                 this.cube.drawRect(0, 0, this.cubeWidth, this.cubeHeight);
                 this.cube.endFill();
                 
-                //устанавливаем координаты каждой клетки
+                //устанавливаем относительные координаты каждой клетки
+                //ставим пивот в левый верхний угол каждой клетки
                 this.cube.x = cubeX;
                 this.cube.y = cubeY;
                 //сначала проходимся по ширине
@@ -56,17 +60,18 @@ export class Grid {
 
                 console.log("Обьект: " + this.cube.fill.color);
                 //добавляем на поле нашу клетку
-                this.rectangleMain.addChild(this.cube);
+                this.containerMain.addChild(this.cube);
             }
             //проходимся по высоте
             cubeY += this.cubeHeight;
         }
-        //создаем стартовый квардратик, откуда будут рисоваться остальные фигуры
+        //задаем стартовую клетку, откуда будут рисоваться остальные фигуры
         // this.cubeWidth, this.cubeHeight - чтобы сохранять размер клетки
-        this.startShape = new Shapes(this.rectangleMain, gridSet[2][3].x, gridSet[2][3].y, this.cubeWidth, this.cubeHeight)
+        this.startCube = gridSet[2][5];
+        this.startShape = new Shapes(this.containerMain, this.startCube.x, this.startCube.y, this.cubeWidth, this.cubeHeight)
         this.startShape.create();
-        //вывод параметров выбранной клетки, на котором будет рисоваться стартовый квадратик
-        console.log(gridSet[2][3].x, gridSet[2][3].y);
 
+        //вывод параметров выбранной клетки, на котором будет рисоваться стартовый квадратик
+        console.log(this.startCube.x, this.startCube.y);
     }
 }
