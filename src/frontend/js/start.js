@@ -50,7 +50,7 @@ export class Main {
         app.stage.addChild(this.containerMain);
 
         //инициализация сетки
-        this.grid = new Grid (this.containerMain, containerWidth, containerHeight)
+        this.grid = new Grid (this.app, this.containerMain, containerWidth, containerHeight)
     }
 
     start() {

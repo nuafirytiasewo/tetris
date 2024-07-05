@@ -1,14 +1,15 @@
 import * as PIXI from 'pixi.js';
-import {WIDTH_BORDER, BORDER_COLOR, WORD_SHAPE} from './constants';
+import {WIDTH_BORDER, BORDER_COLOR, WORD_SHAPE, ROTATE_SHAPE} from './constants';
 
 //этот класс отвечает за создание стартового квадратика, откуда будут рисоваться остальные фигуры
 export class Shapes {
     constructor(containerMain, startShapeX, startShapeY, startShapeWidth, startShapeHeight) {
         this.containerMain = containerMain;
-        this.startShapeX = startShapeX;
-        this.startShapeY = startShapeY;
-        this.startShapeWidth = startShapeWidth;
-        this.startShapeHeight = startShapeHeight;
+        this.startShapeX = startShapeX; // начальная координата x фигуры
+        this.startShapeY = startShapeY; // начальная координата y фигуры
+        this.startShapeWidth = startShapeWidth; // ширина клетки фигуры
+        this.startShapeHeight = startShapeHeight; // высота клетки фигуры
+        this.defaultRotateShape = 90; //какой у нее поворот (по умолчанию)
     }
     create() {
         //записываем в переменную стартовый квадратик
@@ -28,10 +29,9 @@ export class Shapes {
         
         //какую фигуру рисуем
         let shapeWord = 'T';
-        //какой у нее поворот
-        let rotateShape = 90;
+        
         //массив фигуры
-        let shapeArray = WORD_SHAPE[shapeWord].rotations[rotateShape];
+        let shapeArray = WORD_SHAPE[shapeWord].rotations[this.defaultRotateShape];
         //цвет фигуры
         let shapeColor = WORD_SHAPE[shapeWord].color;
 
@@ -51,5 +51,33 @@ export class Shapes {
 
         //добавляем на поле нашу фигуру
         this.containerMain.addChild(this.startShape);
+    }
+
+    fallShape() {
+        //перемещаем пивот вниз на высоту ровно одного кубика
+        this.startShape.y += this.startShapeHeight;
+        //вывод
+        // console.log(this.startShape.y);
+    }
+
+    moveLeftShape() {
+        //перемещаем пивот влево на ширину ровно одного кубика
+        this.startShape.x -= this.startShapeWidth;
+        //вывод
+        // console.log(this.startShape.x);
+    }
+
+    moveRightShape() {
+        //перемещаем пивот вправо на ширину ровно одного кубика
+        this.startShape.x += this.startShapeWidth;
+        //вывод
+        // console.log(this.startShape.x);
+    }
+
+    rotateShape() {
+        //перемещаем пивот вправо на ширину ровно одного кубика
+        this.defaultRotateShape += ROTATE_SHAPE;
+        //вывод
+        console.log(this.defaultRotateShape);
     }
 }

@@ -19,6 +19,7 @@ PIXI_SOUND.default.add('theme', {
     volume: 0.5, // громкость музыки (от 0 до 1)
     complete: function() {
         console.log('Музыка загружена');
+        // PIXI_SOUND.default.play('theme');
     }
 });
 
