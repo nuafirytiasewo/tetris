@@ -70,10 +70,18 @@ export class Grid {
         // this.cubeWidth, this.cubeHeight - чтобы сохранять размер клетки
         this.startCube = gridSet[2][5];
         
+        //вывод параметров "стартовой" клетки, на которой будет рисоваться стартовый квадратик
+        console.log("Стартовая клетка:", this.startCube.x, this.startCube.y);
+
+        this.defaultRotateShape = 90; //какой поворот у фигуры (по умолчанию)
         //инициализируем фигуру
-        this.startShape = new Shapes(this.containerMain, this.startCube.x, this.startCube.y, this.cubeWidth, this.cubeHeight);
+        this.startShape = new Shapes(this.containerMain, this.startCube.x, this.startCube.y, this.cubeWidth, this.cubeHeight, this.defaultRotateShape);
         //рисуем фигуру
         this.startShape.create();
+
+        //присваиваем координаты стартовой клетки координатам фигуры
+        this.startShape.x = this.startCube.x;
+        this.startShape.y = this.startCube.y
         
         //иницаиализируем переменную, которая будет считать сколько времени прошло (будет хранить в себе миллисекунды)
         let timer = 0;
@@ -91,8 +99,10 @@ export class Grid {
             if (timer >= frequency) {
                 //обнуляем таймер
                 timer = 0;
-                //фигура "падает"
-                this.startShape.fallShape();
+                //фигура "падает" и возвращает координату по y
+                this.startShape.y = this.startShape.fallShape();
+                //вывод координат
+                console.log("Координаты фигуры:", this.startShape.x, this.startShape.y);
             }
         });
 
@@ -103,28 +113,36 @@ export class Grid {
             const keyName = event.key; // получение названия нажатой клавиши
             //при нажатии на стрелку влево, фигура перемещается влево
             if (keyName === "ArrowLeft") {
-              this.startShape.moveLeftShape();
+              //фигура перемещается влево и возвращает координату по x
+              this.startShape.x = this.startShape.moveLeftShape();
+              //вывод координат
+              console.log("Координаты фигуры:", this.startShape.x, this.startShape.y);
             }
 
-            //при нажатии на стрелку вправо, фигура перемещается влево
+            //при нажатии на стрелку вправо 
             if (keyName === "ArrowRight") {
-              this.startShape.moveRightShape();
+              //фигура перемещается вправо и возвращает координату по x
+              this.startShape.x = this.startShape.moveRightShape();
+              //вывод координат
+              console.log("Координаты фигуры:", this.startShape.x, this.startShape.y);
             }
 
-            //при нажатии на стрелку вверх, фигура поворачивается на 90
+            //при нажатии на стрелку вверх 
             if (keyName === "ArrowUp") {
-              this.startShape.rotateShape();
+              //фигура поворачивается на 90 градусов
+              this.defaultRotateShape = this.startShape.rotateShape();
+              //вывод поворота
+              console.log("Поворот фигуры:", this.defaultRotateShape);
             }
 
             //при нажатии на стрелку вниз, фигура падает вниз быстрее
             if (keyName === "ArrowDown") {
-              //фигура "падает"
-              this.startShape.fallShape();
+              //фигура "падает" и возвращает координату по y
+              this.startShape.y = this.startShape.fallShape();
+              //вывод координат
+              console.log("Координаты фигуры:", this.startShape.x, this.startShape.y);
             }
-          });
-
-        //вывод параметров выбранной клетки, на котором будет рисоваться стартовый квадратик
-        console.log(this.startCube.x, this.startCube.y);
+        });
     }
 }
 

@@ -3,23 +3,38 @@ import {WIDTH_BORDER, BORDER_COLOR, WORD_SHAPE, ROTATE_SHAPE} from './constants'
 
 //этот класс отвечает за создание стартового квадратика, откуда будут рисоваться остальные фигуры
 export class Shapes {
-    constructor(containerMain, startShapeX, startShapeY, startShapeWidth, startShapeHeight) {
+    constructor(containerMain, startShapeX, startShapeY, startShapeWidth, startShapeHeight, defaultRotateShape) {
         this.containerMain = containerMain;
         this.startShapeX = startShapeX; // начальная координата x фигуры
         this.startShapeY = startShapeY; // начальная координата y фигуры
         this.startShapeWidth = startShapeWidth; // ширина клетки фигуры
         this.startShapeHeight = startShapeHeight; // высота клетки фигуры
-        this.defaultRotateShape = 90; //какой у нее поворот (по умолчанию)
+        this.defaultRotateShape = defaultRotateShape; //какой у нее поворот (по умолчанию)
     }
-    create() {
-        //записываем в переменную стартовый квадратик
-        this.startShape = new PIXI.Graphics();
+    //создание фигуры
+    create(currentX, currentY) {
+        //если уже существует фигура
+        if (this.startShape) {
+            // то удаляем предыдущую фигуру перед созданием новой
+            this.containerMain.removeChild(this.startShape);
+            //записываем в переменную стартовый квадратик
+            this.startShape = new PIXI.Graphics();
 
-        //устанавливаем "пивот" в стартовый квадратик по координатам
-        this.startShape.x = this.startShapeX;/* + this.startShapeWidth; 
-        тут мы ничего не увеличиваем, потому что заденем 
-        пивот стартового квадратика*/
-        this.startShape.y = this.startShapeY;
+            //загружаем координаты "перерисованной" фигуры
+            this.startShape.x = currentX;
+            this.startShape.y = currentY;
+        }
+        //если первый раз фигуру создаем, то
+        else {
+            //записываем в переменную стартовый квадратик
+            this.startShape = new PIXI.Graphics();
+
+            //устанавливаем "пивот" в стартовый квадратик по координатам
+            this.startShape.x = this.startShapeX;/* + this.startShapeWidth; 
+            тут мы ничего не увеличиваем, потому что заденем 
+            пивот стартового квадратика*/
+            this.startShape.y = this.startShapeY;
+        }
 
         //вывод
         console.log("Ширина стартовой клетки");
@@ -53,31 +68,46 @@ export class Shapes {
         this.containerMain.addChild(this.startShape);
     }
 
+    //функция для того чтобы фигура падала
     fallShape() {
         //перемещаем пивот вниз на высоту ровно одного кубика
         this.startShape.y += this.startShapeHeight;
-        //вывод
-        // console.log(this.startShape.y);
+        //возвращаем координату пивота фигуры по y
+        return this.startShape.y;
     }
 
+    //функция для перемещения фигуры влево
     moveLeftShape() {
         //перемещаем пивот влево на ширину ровно одного кубика
         this.startShape.x -= this.startShapeWidth;
-        //вывод
-        // console.log(this.startShape.x);
+        //возвращаем координату пивота фигуры по x
+        return this.startShape.x;
     }
 
+    //функция для перемещения фигуры вправо
     moveRightShape() {
         //перемещаем пивот вправо на ширину ровно одного кубика
         this.startShape.x += this.startShapeWidth;
-        //вывод
-        // console.log(this.startShape.x);
+        //возвращаем координату пивота фигуры по x
+        return this.startShape.x;
     }
 
+    //функция для вращения фигуры на 90 градусов
     rotateShape() {
-        //перемещаем пивот вправо на ширину ровно одного кубика
+        //прибавляем 90 градусов
         this.defaultRotateShape += ROTATE_SHAPE;
-        //вывод
-        console.log(this.defaultRotateShape);
+        //если фигура больше, чем на 270 градусов, то
+        if (this.defaultRotateShape > 270) {
+            //обнуляем поворот
+            this.defaultRotateShape = 0;
+        }
+        //сохраняем текущее положение фигуры перед ее перерисовкой
+        let currentX = this.startShape.x; //записываем текующую координату по x
+        let currentY = this.startShape.y; //записываем текующую координату по y
+
+        //перерисовываем фигуру после поворота
+        this.create(currentX, currentY); 
+        //возвращаем поворот фигуры
+        return this.defaultRotateShape;
     }
 }
