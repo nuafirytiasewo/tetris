@@ -11,6 +11,14 @@ export class Shapes {
         this.startShapeHeight = startShapeHeight; // высота клетки фигуры
         this.defaultRotateShape = defaultRotateShape; //какой у нее поворот (по умолчанию)
     }
+
+    //функция для случайного выбора буквы
+    getRandomShapeWord() {
+        const shapeKeys = Object.keys(WORD_SHAPE); //получаем все возможные ключи (буквы)
+        const randomIndex = Math.floor(Math.random() * shapeKeys.length); //выбираем случайный индекс
+        return shapeKeys[randomIndex]; //возвращаем случайную букву
+    }
+
     //создание фигуры
     create(currentX, currentY) {
         //если уже существует фигура
@@ -43,8 +51,8 @@ export class Shapes {
         console.log("y: " + this.startShape.y);
         
         //какую фигуру рисуем
-        let shapeWord = 'T';
-        
+        let shapeWord = this.getRandomShapeWord(); //используем случайную букву
+
         //массив фигуры
         let shapeArray = WORD_SHAPE[shapeWord].rotations[this.defaultRotateShape];
         //цвет фигуры

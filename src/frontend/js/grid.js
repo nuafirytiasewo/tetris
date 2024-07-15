@@ -4,10 +4,14 @@ import { Shapes } from './shapes';
 
 //этот класс отвечает за создание сетки, которая будет заполнена клетками
 export class Grid {
-    constructor(app, containerMain, containerWidth, containerHeight) {
+    constructor(app, containerMain, containerX, containerY, containerWidth, containerHeight) {
         this.app = app;
         //передаем контейнер
         this.containerMain = containerMain;
+        //передаем Абсолютный X контейнера
+        this.containerX = containerX;
+        //передаем Абсолютный Y контейнера
+        this.containerY = containerY;
         //передаем ширину контейнера
         this.containerWidth = containerWidth;
         //передаем высоту контейнера
@@ -99,10 +103,13 @@ export class Grid {
             if (timer >= frequency) {
                 //обнуляем таймер
                 timer = 0;
-                //фигура "падает" и возвращает координату по y
-                this.startShape.y = this.startShape.fallShape();
-                //вывод координат
-                console.log("Координаты фигуры:", this.startShape.x, this.startShape.y);
+                //если координата Y фигуры меньше, чем абсолютный Y контейнера + его высота
+                if (this.startShape.y < this.containerY + this.containerHeight) {
+                  //фигура "падает" и возвращает координату по y
+                  this.startShape.y = this.startShape.fallShape();
+                  //вывод координат
+                  console.log("Координаты фигуры:", this.startShape.x, this.startShape.y);
+                }
             }
         });
 
@@ -113,18 +120,24 @@ export class Grid {
             const keyName = event.key; // получение названия нажатой клавиши
             //при нажатии на стрелку влево, фигура перемещается влево
             if (keyName === "ArrowLeft") {
-              //фигура перемещается влево и возвращает координату по x
-              this.startShape.x = this.startShape.moveLeftShape();
-              //вывод координат
-              console.log("Координаты фигуры:", this.startShape.x, this.startShape.y);
+              //если координата X фигуры больше, чем абсолютный X контейнера
+              if (this.startShape.x > this.containerX) {
+                  //фигура перемещается влево и возвращает координату по x
+                  this.startShape.x = this.startShape.moveLeftShape();
+                  //вывод координат
+                  console.log("Координаты фигуры:", this.startShape.x, this.startShape.y);
+              }
             }
 
             //при нажатии на стрелку вправо 
             if (keyName === "ArrowRight") {
-              //фигура перемещается вправо и возвращает координату по x
-              this.startShape.x = this.startShape.moveRightShape();
-              //вывод координат
-              console.log("Координаты фигуры:", this.startShape.x, this.startShape.y);
+              //если координата X фигуры меньше, чем абсолютный X контейнера + его ширина
+              if (this.startShape.x < this.containerX + this.containerWidth) {
+                //фигура перемещается вправо и возвращает координату по x
+                this.startShape.x = this.startShape.moveRightShape();
+                //вывод координат
+                console.log("Координаты фигуры:", this.startShape.x, this.startShape.y);
+              }
             }
 
             //при нажатии на стрелку вверх 
@@ -137,10 +150,13 @@ export class Grid {
 
             //при нажатии на стрелку вниз, фигура падает вниз быстрее
             if (keyName === "ArrowDown") {
-              //фигура "падает" и возвращает координату по y
-              this.startShape.y = this.startShape.fallShape();
-              //вывод координат
-              console.log("Координаты фигуры:", this.startShape.x, this.startShape.y);
+              //если координата Y фигуры меньше, чем абсолютный Y контейнера + его высота
+              if (this.startShape.y < this.containerY + this.containerHeight) {
+                //фигура "падает" и возвращает координату по y
+                this.startShape.y = this.startShape.fallShape();
+                //вывод координат
+                console.log("Координаты фигуры:", this.startShape.x, this.startShape.y);
+              }
             }
         });
     }
