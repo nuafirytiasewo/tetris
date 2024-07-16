@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import {BORDER_COLOR, CUBE_FILL_COLOR, WIDTH_BORDER, WIDTH_FIELD, HEIGHT_FIELD} from './constants';
+import {WORD_SHAPE, BORDER_COLOR, CUBE_FILL_COLOR, WIDTH_BORDER, WIDTH_FIELD, HEIGHT_FIELD} from './constants';
 import { Shapes } from './shapes';
 
 //этот класс отвечает за создание сетки, которая будет заполнена клетками
@@ -21,6 +21,12 @@ export class Grid {
         this.cubeWidth = this.containerWidth / WIDTH_FIELD; //делим на 10, потому что в ширину их должно быть 10
         //делим на 20, потому что в высоту их должно быть 20, 
         this.cubeHeight = this.containerHeight / HEIGHT_FIELD; //а также потому что высота в 2 раза больше ширины у прямоугольника
+    }
+    //функция для случайного выбора буквы
+    getRandomShapeWord() {
+        const shapeKeys = Object.keys(WORD_SHAPE); //получаем все возможные ключи (буквы)
+        const randomIndex = Math.floor(Math.random() * shapeKeys.length); //выбираем случайный индекс
+        return shapeKeys[randomIndex]; //возвращаем случайную букву
     }
     create() {
         // устанавливаем начальные координаты (первой) клетки в левый верхний угол containerMain
@@ -78,8 +84,10 @@ export class Grid {
         console.log("Стартовая клетка:", this.startCube.x, this.startCube.y);
 
         this.defaultRotateShape = 90; //какой поворот у фигуры (по умолчанию)
+        //какую букву фигуры рисуем
+        this.shapeWord = this.getRandomShapeWord(); //используем случайную букву
         //инициализируем фигуру
-        this.startShape = new Shapes(this.containerMain, this.startCube.x, this.startCube.y, this.cubeWidth, this.cubeHeight, this.defaultRotateShape);
+        this.startShape = new Shapes(this.containerMain, this.startCube.x, this.startCube.y, this.cubeWidth, this.cubeHeight, this.defaultRotateShape, this.shapeWord);
         //рисуем фигуру
         this.startShape.create();
 

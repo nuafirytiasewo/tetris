@@ -3,20 +3,14 @@ import {WIDTH_BORDER, BORDER_COLOR, WORD_SHAPE, ROTATE_SHAPE} from './constants'
 
 //этот класс отвечает за создание стартового квадратика, откуда будут рисоваться остальные фигуры
 export class Shapes {
-    constructor(containerMain, startShapeX, startShapeY, startShapeWidth, startShapeHeight, defaultRotateShape) {
+    constructor(containerMain, startShapeX, startShapeY, startShapeWidth, startShapeHeight, defaultRotateShape, shapeWord) {
         this.containerMain = containerMain;
         this.startShapeX = startShapeX; // начальная координата x фигуры
         this.startShapeY = startShapeY; // начальная координата y фигуры
         this.startShapeWidth = startShapeWidth; // ширина клетки фигуры
         this.startShapeHeight = startShapeHeight; // высота клетки фигуры
         this.defaultRotateShape = defaultRotateShape; //какой у нее поворот (по умолчанию)
-    }
-
-    //функция для случайного выбора буквы
-    getRandomShapeWord() {
-        const shapeKeys = Object.keys(WORD_SHAPE); //получаем все возможные ключи (буквы)
-        const randomIndex = Math.floor(Math.random() * shapeKeys.length); //выбираем случайный индекс
-        return shapeKeys[randomIndex]; //возвращаем случайную букву
+        this.shapeWord = shapeWord;
     }
 
     //создание фигуры
@@ -50,13 +44,12 @@ export class Shapes {
         console.log("x: " + this.startShape.x);
         console.log("y: " + this.startShape.y);
         
-        //какую фигуру рисуем
-        let shapeWord = this.getRandomShapeWord(); //используем случайную букву
+        
 
         //массив фигуры
-        let shapeArray = WORD_SHAPE[shapeWord].rotations[this.defaultRotateShape];
+        let shapeArray = WORD_SHAPE[this.shapeWord].rotations[this.defaultRotateShape];
         //цвет фигуры
-        let shapeColor = WORD_SHAPE[shapeWord].color;
+        let shapeColor = WORD_SHAPE[this.shapeWord].color;
 
         //проходимся по фигуре, по 0 градусов поворота, чтобы проверить вывод координат для инициализации фигур
         for (let i = 0; i < shapeArray.length; i++) {
