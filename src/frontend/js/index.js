@@ -11,19 +11,23 @@ const main = new Main(app);
 //запуск кода
 main.start();
 
-// загрузка музыки
+//загрузка музыки
 PIXI_SOUND.default.add('theme', {
-    url: 'src/frontend/sounds/theme.mp3',
-    preload: true,
-    loop: true,
-    volume: 0.5, // громкость музыки (от 0 до 1)
-    complete: function() {
-        console.log('Музыка загружена');
-        // PIXI_SOUND.default.play('theme');
+    url: 'src/frontend/sounds/theme.mp3', //url для загрузки музыки
+    preload: true, //предварительная загрузка музыки
+    loop: true, //зацикливание музыки
+    volume: 0.5, //громкость музыки (от 0 до 1)
+    complete: function() { //функция, выполняемая по завершении загрузки
+        console.log('Музыка загружена'); //сообщение в консоли о завершении загрузки
     }
 });
 
-// по клику воспроисводится музыка (нужно чтобы избежать ошибки)
-document.addEventListener('click', () => {
-    PIXI_SOUND.default.play('theme');
-});
+//обработчик для запуска музыки при первом взаимодействии с пользователем
+const startMusicOnInteraction = () => { 
+    PIXI_SOUND.default.play('theme'); //воспроизведение музыки
+    document.removeEventListener('click', startMusicOnInteraction); //удаление обработчика события клика
+    document.removeEventListener('keydown', startMusicOnInteraction); //удаление обработчика события нажатия клавиши
+};
+
+document.addEventListener('click', startMusicOnInteraction); //добавление обработчика события клика
+document.addEventListener('keydown', startMusicOnInteraction); //добавление обработчика события нажатия клавиши

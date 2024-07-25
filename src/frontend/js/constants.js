@@ -14,6 +14,8 @@ export const HEIGHT_FIELD = 20;
 export const ROTATE_SHAPE = 90;
 //скорость падения фигуры в миллисекундах
 export const FALLING_SPEED = 700;
+//константа для центральной колонки игрового поля
+export const CENTER_COLUMN = Math.floor(WIDTH_FIELD / 2);
 
 /* 
 список фигур с их цветами и координатами для всех поворотов:

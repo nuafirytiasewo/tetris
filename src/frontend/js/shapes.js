@@ -1,9 +1,9 @@
 import * as PIXI from 'pixi.js';
-import { WORD_SHAPE, WIDTH_FIELD, HEIGHT_FIELD, ROTATE_SHAPE, FALLING_SPEED, BORDER_COLOR, WIDTH_BORDER} from './constants';
+import { WORD_SHAPE, WIDTH_FIELD, HEIGHT_FIELD, ROTATE_SHAPE, FALLING_SPEED, BORDER_COLOR, WIDTH_BORDER, CENTER_COLUMN} from './constants';
 
 //класс для управления фигурами в игре
 export class Shapes {
-    constructor(app, cubeWidth, cubeHeight, containerMain, containerX, containerY, containerWidth, containerHeight, gridSet) {
+    constructor(app, cubeWidth, cubeHeight, containerMain, containerX, containerY, containerWidth, containerHeight, gridSet, grid) {
         this.app = app; //ссылка на приложение PIXI
         this.cubeWidth = cubeWidth; //ширина одного кубика
         this.cubeHeight = cubeHeight; //высота одного кубика
@@ -13,6 +13,7 @@ export class Shapes {
         this.containerWidth = containerWidth; //ширина контейнера
         this.containerHeight = containerHeight; //высота контейнера
         this.gridSet = gridSet; //сетка для хранения состояния ячеек
+        this.grid = grid; //ссылка на объект сетки
 
         this.currentShape = null; //текущая фигура
         this.fallInterval = null; //интервал для падения фигуры
@@ -53,7 +54,7 @@ export class Shapes {
         //создание объекта фигуры
         this.currentShape = {
             word: shapeWord, //название формы
-            coordinates: shapeData.rotations["0"].map(coord => [coord[0] + Math.floor(WIDTH_FIELD / 2), coord[1]]), //начальные координаты
+            coordinates: shapeData.rotations["0"].map(coord => [coord[0] + CENTER_COLUMN, coord[1]]), //начальные координаты
             rotation: 0, //начальный угол поворота
             color: shapeColor //цвет фигуры
         };
@@ -100,6 +101,8 @@ export class Shapes {
 
     //функция для движения фигуры в указанном направлении
     moveShape(direction) {
+        if (!this.currentShape) return; //проверка на null
+
         let xShift = 0; //смещение по X
         let yShift = 0; //смещение по Y
 
@@ -118,12 +121,18 @@ export class Shapes {
             this.drawShape(); //отрисовка фигуры
         } else if (direction === 'down') { //если движение вниз невозможно
             this.fixShape(); //фиксация фигуры на сетке
-            this.createShape(); //создание новой фигуры
+            if (this.isGameOver()) {
+                this.gameOver(); //если игра окончена, вызываем функцию gameOver
+            } else {
+                this.createShape(); //создание новой фигуры
+            }
         }
     }
 
     //функция для поворота фигуры
     rotateShape() {
+        if (!this.currentShape) return; //проверка на null
+
         const nextRotation = (this.currentShape.rotation + ROTATE_SHAPE) % 360; //вычисление угла поворота
         const shapeData = WORD_SHAPE[this.currentShape.word].rotations[nextRotation]; //данные для нового поворота
         const pivot = this.currentShape.coordinates[0]; //пивот (опорная точка) фигуры
@@ -156,6 +165,8 @@ export class Shapes {
 
     //функция для фиксации фигуры на сетке
     fixShape() {
+        if (!this.currentShape) return; //проверка на null
+
         this.currentShape.coordinates.forEach(coord => {
             const x = coord[0]; //координата X
             const y = coord[1]; //координата Y
@@ -221,5 +232,30 @@ export class Shapes {
         }
 
         this.drawShape(); //отрисовка текущей фигуры
+    }
+
+    //функция для проверки условия проигрыша
+    isGameOver() {
+        if (!this.currentShape) return false; //проверка на null
+
+        return this.currentShape.coordinates.some(coord => coord[1] < 0 && this.gridSet[coord[1]] && this.gridSet[coord[1]][coord[0]]);
+    }
+
+    //функция для обработки конца игры
+    gameOver() {
+        clearInterval(this.fallInterval); //остановка интервала падения фигуры
+        alert('Игра окончена! Начать сначала?'); //уведомление о конце игры
+        this.restartGame(); //перезапуск игры
+    }
+
+    //функция для перезапуска игры
+    restartGame() {
+        this.containerMain.removeChildren(); //удаление всех детей из основного контейнера
+        this.gridSet = Array.from({ length: HEIGHT_FIELD }, () => Array(WIDTH_FIELD).fill(0)); //сброс сетки
+        this.shapeGraphics = []; //очистка массива графических объектов
+        this.currentShape = null; //сброс текущей фигуры
+        clearInterval(this.fallInterval); //остановка интервала падения фигуры
+        this.fallInterval = null; //сброс интервала падения фигуры
+        this.grid.restartGame(); //перезапуск игры через объект сетки
     }
 }
