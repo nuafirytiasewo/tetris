@@ -24,12 +24,12 @@ export class Main {
 
         //если чел запускает на компе (то есть если ширина экрана больше, чем высота)
         if (app.screen.width >= app.screen.height) {
-            containerWidth = app.screen.width * 0.2; // ширина контейнера (20% от ширины экрана)
+            containerWidth = app.screen.width * 0.5; // ширина контейнера (50% от ширины экрана)
             containerHeight = containerWidth * 2; // высота контейнера (в 2 раза больше чем ширина)
         } 
         //иначе на мобилке
         else {
-            containerWidth = app.screen.width * 0.6; // ширина контейнера (60% от ширины экрана)
+            containerWidth = app.screen.width * 0.9; // ширина контейнера (90% от ширины экрана)
             containerHeight = containerWidth * 2; // высота контейнера (в 2 раза больше чем ширина)
         }
         
