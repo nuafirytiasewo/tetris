@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import {WORD_SHAPE, BORDER_COLOR, CUBE_FILL_COLOR, WIDTH_BORDER, WIDTH_FIELD, HEIGHT_FIELD, FALLING_SPEED} from './constants';
+import { WORD_SHAPE, BORDER_COLOR, CUBE_FILL_COLOR, WIDTH_BORDER, WIDTH_FIELD, HEIGHT_FIELD, FALLING_SPEED } from './constants';
 import { Shapes } from './shapes';
 
 //класс для создания и управления сеткой
@@ -34,13 +34,13 @@ export class Grid {
             gridSet[i] = []; //инициализация нового ряда
 
             for (let j = 0; j < WIDTH_FIELD; j++) { //цикл по ширине сетки
-                this.cube = new PIXI.Graphics(); //создание нового графического объекта для кубика
-                this.cube.lineStyle(WIDTH_BORDER, BORDER_COLOR, 1); //установка стиля линии для границ кубика
-                this.cube.beginFill(CUBE_FILL_COLOR); //начало заполнения кубика
-                this.cube.drawRect(cubeX, cubeY, this.cubeWidth, this.cubeHeight); //отрисовка кубика
-                this.cube.endFill(); //завершение заполнения кубика
+                const cube = new PIXI.Graphics(); //создание нового графического объекта для кубика
+                cube.lineStyle(WIDTH_BORDER, BORDER_COLOR, 1); //установка стиля линии для границ кубика
+                cube.beginFill(CUBE_FILL_COLOR); //начало заполнения кубика
+                cube.drawRect(cubeX, cubeY, this.cubeWidth, this.cubeHeight); //отрисовка кубика
+                cube.endFill(); //завершение заполнения кубика
 
-                this.containerMain.addChild(this.cube); //добавление кубика в основной контейнер
+                this.containerMain.addChild(cube); //добавление кубика в основной контейнер
                 gridSet[i][j] = 0; //установка начального состояния ячейки в сетке
                 cubeX += this.cubeWidth; //перемещение по оси X для следующего кубика
             }
@@ -48,7 +48,13 @@ export class Grid {
         }
 
         //создание экземпляра класса Shapes и инициализация его
-        this.shapes = new Shapes(this.app, this.cubeWidth, this.cubeHeight, this.containerMain, this.containerX, this.containerY, this.containerWidth, this.containerHeight, gridSet);
+        this.shapes = new Shapes(this.app, this.cubeWidth, this.cubeHeight, this.containerMain, this.containerX, this.containerY, this.containerWidth, this.containerHeight, gridSet, this);
         this.shapes.init(); //вызов метода инициализации у объекта shapes
+    }
+
+    //функция для перезапуска игры
+    restartGame() {
+        this.containerMain.removeChildren(); //удаление всех детей из основного контейнера
+        this.create(); //создание новой сетки и инициализация игры заново
     }
 }
