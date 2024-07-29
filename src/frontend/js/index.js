@@ -1,8 +1,23 @@
 import * as PIXI from 'pixi.js';
 import { Main } from './start';
 import * as PIXI_SOUND from 'pixi-sound';
+import { WIDTH_FIELD, HEIGHT_FIELD } from './constants';
 
-const app = new PIXI.Application({ antialias: true, resizeTo: window });
+//увеличиваем размеры сетки в два раза
+const gridWidth = WIDTH_FIELD; //количество клеток по горизонтали
+const gridHeight = HEIGHT_FIELD; //количество клеток по вертикали
+const cellSize = 32; //Размер одной клетки в пикселях
+
+const appWidth = gridWidth * cellSize * 3; //вычисляем ширину приложения
+const appHeight = gridHeight * cellSize * 3; //вычисляем высоту приложения
+
+const app = new PIXI.Application({ 
+    width: appWidth,  //устанавливаем ширину приложения
+    height: appHeight, //устанавливаем высоту приложения
+    antialias: true,  //включаем сглаживание
+    backgroundColor: 0x000000 //устанавливаем черный фон
+});
+
 //для расширения в браузере, чтобы смотреть обьекты
 globalThis.__PIXI_APP__ = app;
 document.body.appendChild(app.view);
@@ -31,3 +46,24 @@ const startMusicOnInteraction = () => {
 
 document.addEventListener('click', startMusicOnInteraction); //добавление обработчика события клика
 document.addEventListener('keydown', startMusicOnInteraction); //добавление обработчика события нажатия клавиши
+
+//функция для масштабирования и центрирования canvas
+function resizeCanvas() {
+    const viewportWidth = window.innerWidth; //ширина окна браузера
+    const viewportHeight = window.innerHeight; //высота окна браузера
+    const scale = Math.min(viewportWidth / app.screen.width, viewportHeight / app.screen.height); //вычисляем масштаб
+    const scaledWidth = app.screen.width * scale; //масштабированная ширина
+    const scaledHeight = app.screen.height * scale; //масштабированная высота
+
+    app.view.style.width = `${scaledWidth}px`; //устанавливаем ширину canvas
+    app.view.style.height = `${scaledHeight}px`; //устанавливаем высоту canvas
+    app.view.style.position = 'absolute'; //устанавливаем позиционирование
+    app.view.style.left = `${(viewportWidth - scaledWidth) / 2}px`; //центрируем по горизонтали
+    app.view.style.top = `${(viewportHeight - scaledHeight) / 2}px`; //центрируем по вертикали
+}
+
+//обработчик для изменения размера окна
+window.addEventListener('resize', resizeCanvas);
+
+//инициализация размера canvas
+resizeCanvas();
